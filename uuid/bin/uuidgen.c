@@ -239,7 +239,7 @@ int parse_conf(int argc, char** argv, struct config_t* cfg) {
 
 
 typedef const char* (*uuid_output_fn_t)(const uuid_t);
-static char uuid_unparse_buf[60];
+static char uuid_unparse_buf[80];
 const char* uuid_unparse_x_(const uuid_t uuid) {
   /* This function implicitly trusts uuid_unparse. */
   unsigned int a, b, c, d, e, f, g, h, i, j, k;
@@ -249,7 +249,7 @@ const char* uuid_unparse_x_(const uuid_t uuid) {
                "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
                &a, &b, &c, &d, &e, &f, &g, &h, &i, &j, &k);
   if(ret != 11) {
-    uuid_unparse_buf[59] = '\0';
+    uuid_unparse_buf[79] = '\0';
     fprintf(stderr,
             "%s: libuuid error at %s:%d\n", program, __FILE__, __LINE__);
     fprintf(stderr,
