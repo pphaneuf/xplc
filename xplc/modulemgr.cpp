@@ -29,6 +29,12 @@
 #ifdef HAVE_STDINT_H
 # include <stdint.h>
 #endif
+#ifdef HAVE_STDLIB_H
+# include <stdlib.h>
+#endif
+#ifdef HAVE_STRING_H
+# include <string.h>
+#endif
 #ifdef HAVE_LIMITS_H
 # include <limits.h>
 #endif
@@ -83,7 +89,8 @@ IServiceHandler* ModuleManagerFactory::createModuleManager(const char* directory
 #if !defined(WIN32)
   DIR* dir;
   struct dirent* ent;
-  char fname[PATH_MAX];
+  char *fname = NULL;
+  int len = 0;
   IServiceManager* servmgr = XPLC_getServiceManager();
   IModuleLoader* loader;
   ModuleNode* modules = 0;
@@ -106,7 +113,10 @@ IServiceHandler* ModuleManagerFactory::createModuleManager(const char* directory
   while((ent = readdir(dir))) {
     IModule* module;
 
-    snprintf(fname, PATH_MAX, "%s/%s", directory, ent->d_name);
+    len = strlen(directory) + 1 + strlen(ent->d_name) + 1;
+    free(fname);
+    fname = (char*)malloc(len);
+    snprintf(fname, len, "%s/%s", directory, ent->d_name);
 
     module = loader->loadModule(fname);
     if(module) {
@@ -117,6 +127,7 @@ IServiceHandler* ModuleManagerFactory::createModuleManager(const char* directory
     }
   }
 
+  free(fname);
   loader->release();
 
   closedir(dir);
