@@ -21,7 +21,7 @@
 
 default: libxplc.a libxplc_s.a libxplc.so xplc-uninstalled.pc
 
-libxplc.a libxplc.so: $(patsubst %.cpp,%.o,$(wildcard xplc/*.cpp))
+libxplc.a libxplc.so: $(patsubst %.cpp,%.o,$(sort $(wildcard xplc/*.cpp)))
 
 libxplc.so: libxplc-cxx.a
 
